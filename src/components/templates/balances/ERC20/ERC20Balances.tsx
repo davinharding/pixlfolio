@@ -6,7 +6,6 @@ import {
   Th,
   Tbody,
   Td,
-  Tfoot,
   VStack,
   Heading,
   Box,
