@@ -21,6 +21,7 @@
     "@moralisweb3/next": "^2.14.1",
     "@web3uikit/core": "^0.1.5",
     "@web3uikit/icons": "^0.4.1",
+    "comma-number": "^2.1.0",
     "eslint-config-next": "^13.3.1",
     "ethers": "^5.6.9",
     "framer-motion": "^10",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@moralisweb3/eslint-config": "^1.0.1",
+    "@types/comma-number": "^2.1.2",
     "@types/node": "18.16.0",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",

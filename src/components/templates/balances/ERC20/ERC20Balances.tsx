@@ -15,11 +15,12 @@ import {
   HStack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useEvmWalletTokenBalances } from '@moralisweb3/next';
+import { useEvmWalletTokenBalances, useEvmTokenPrice } from '@moralisweb3/next';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { getEllipsisTxt } from 'utils/format';
 import { useNetwork } from 'wagmi';
+import commaNumber from 'comma-number';
 
 const ERC20Balances = () => {
   const hoverTrColor = useColorModeValue('gray.100', 'gray.700');
@@ -28,7 +29,14 @@ const ERC20Balances = () => {
   const { data: tokenBalances } = useEvmWalletTokenBalances({
     address: data?.user?.address,
     chain: chain?.id,
+    tokenAddresses: ['0x427a03fb96d9a94a6727fbcfbba143444090dd64'],
   });
+  const { data: tokenPrice } = useEvmTokenPrice({
+    address: '0x427a03fb96d9a94a6727fbcfbba143444090dd64',
+    chain: chain?.id,
+  });
+
+  console.log(tokenPrice);
 
   useEffect(() => console.log('tokenBalances: ', tokenBalances), [tokenBalances]);
 
@@ -44,8 +52,10 @@ const ERC20Balances = () => {
               <Thead>
                 <Tr>
                   <Th>Token</Th>
-                  <Th>Value</Th>
-                  <Th isNumeric>Address</Th>
+                  <Th>Address</Th>
+                  <Th>Amount</Th>
+                  <Th>Price ($)</Th>
+                  <Th>Total Value ($)</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -62,18 +72,13 @@ const ERC20Balances = () => {
                         </VStack>
                       </HStack>
                     </Td>
-                    <Td>{value}</Td>
-                    <Td isNumeric>{getEllipsisTxt(token?.contractAddress.checksum)}</Td>
+                    <Td>{getEllipsisTxt(token?.contractAddress.checksum)}</Td>
+                    <Td>{commaNumber(parseFloat(value).toFixed(4))}</Td>
+                    <Td>${tokenPrice?.usdPrice.toFixed(4)}</Td>
+                    <Td>${commaNumber(((tokenPrice?.usdPrice || 0) * parseFloat(value)).toFixed(4))}</Td>
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th>Token</Th>
-                  <Th>Value</Th>
-                  <Th isNumeric>Address</Th>
-                </Tr>
-              </Tfoot>
             </Table>
           </TableContainer>
         </Box>
